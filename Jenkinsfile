@@ -34,9 +34,9 @@ pipeline {
                     // para hacer un curl a la API de GitHub
                     container('kaniko') {
                     sh '''
-                    /kaniko/executor --context=`pwd` \
-                    --dockerfile=Dockerfile \ 
-                    --destination=${IMAGE_NAME}:${TAG} \
+                    /kaniko/executor --context=`pwd`
+                    --dockerfile=Dockerfile
+                    --destination=${IMAGE_NAME}:${TAG}
                     --no-push=false
                     '''
                     }
