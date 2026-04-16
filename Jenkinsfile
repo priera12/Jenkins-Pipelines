@@ -21,7 +21,7 @@ pipeline {
                     branches: [[name: 'main']], // O la rama que necesites
                     userRemoteConfigs: [[
                         url: 'https://github.com/priera12/alumnos_backend.git',
-                        credentialsId: $GITHUB_CREDS // El ID de tu credencial
+                        credentialsId: 'Jenkins-pipeline' // El ID de tu credencial
                     ]]
                 ])
             }
