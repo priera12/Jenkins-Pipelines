@@ -60,7 +60,7 @@ pipeline {
         }
         stage('Copy Image to Node'){
             steps{
-                script{
+                container('kubectl'){
                         def podName = sh(script: 'hostname', returnStdout: true).trim()
                         echo "El nombre del pod es: ${podName}"
                         sh "kubectl cp ${podName}:/tmp/${params.IMAGE_NAME}_${params.TAG}.tar ./${params.IMAGE_NAME}_${params.TAG}.tar"
