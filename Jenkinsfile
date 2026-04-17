@@ -17,8 +17,8 @@ pipeline {
                     tty: true
                   - name: kubectl
                     image: bitnami/kubectl:latest
-                    command:
-                    - cat
+                    command: ['cat']
+                    tty: true
             """
         }
     }
