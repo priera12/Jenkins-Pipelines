@@ -17,6 +17,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                sh 'git --version'
+                sh 'printenv'
                 checkout([$class: 'GitSCM', 
                     branches: [[name: 'main']], // O la rama que necesites
                     userRemoteConfigs: [[
