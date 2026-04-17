@@ -17,8 +17,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                sh 'git --version'
-                sh 'printenv'
                 checkout([$class: 'GitSCM', 
                     branches: [[name: 'main']], // O la rama que necesites
                     extensions: [[$class: 'GitOption', remotePolling: false, gitTool: 'Default']],
@@ -35,13 +33,15 @@ pipeline {
                 script {
                     // Ejemplo: Usar el token generado por la GitHub App
                     // para hacer un curl a la API de GitHub
-                    container('kaniko') {
-                    sh '''
-                    /kaniko/executor --context=`pwd`
-                    --dockerfile=Dockerfile
-                    --destination=${IMAGE_NAME}:${TAG}
-                    --no-push=false
-                    '''
+                        sh 'git --version'
+                        sh 'printenv | grep JENKINS'
+//                    container('kaniko') {
+//                    sh '''
+//                    /kaniko/executor --context=`pwd`
+//                    --dockerfile=Dockerfile
+//                    --destination=${IMAGE_NAME}:${TAG}
+//                    --no-push=false
+//                    '''
                     }
                 }
             }
