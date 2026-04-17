@@ -42,7 +42,7 @@ pipeline {
 //                    --destination=${IMAGE_NAME}:${TAG}
 //                    --no-push=false
 //                    '''
-                    }
+//                    }
                 }
             }
         }
