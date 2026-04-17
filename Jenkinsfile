@@ -49,7 +49,7 @@ pipeline {
                     sh """
                     /kaniko/executor --context=`pwd` \
                     --dockerfile=Dockerfile \
-                    --destination=localhost:5000${params.IMAGE_NAME}:${params.TAG} \
+                    --destination=localhost:5000/${params.IMAGE_NAME}:${params.TAG} \
                     --skip-tls-verify=true
                     """
                 }
