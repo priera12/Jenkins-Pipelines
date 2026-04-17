@@ -21,6 +21,7 @@ pipeline {
                 sh 'printenv'
                 checkout([$class: 'GitSCM', 
                     branches: [[name: 'main']], // O la rama que necesites
+                    extensions: [[$class: 'GitOption', remotePolling: false, gitTool: 'Default']],
                     userRemoteConfigs: [[
                         url: 'git@github.com:priera12/alumnos_backend.git',
                         credentialsId: 'Jenkins-pipeline' // El ID de tu credencial
