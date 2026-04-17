@@ -54,7 +54,7 @@ pipeline {
                     /kaniko/executor --context=`pwd` \
                     --dockerfile=Dockerfile \
                     --tar-path /tmp/${params.IMAGE_NAME}_${params.TAG}.tar \
-                    --destination ${params.IMAGE_NAME}_${params.TAG}.tar \
+                    --no-push \
                     --skip-tls-verify=true
                     """
                 }
