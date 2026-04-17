@@ -1,5 +1,33 @@
 pipeline {
-    agent any
+    agent {
+        kubernetes{
+            yaml """
+                apiVersion: v1
+                kind: Pod
+                metadata:
+                  labels:
+                    app: kaniko-build
+                spec:
+                  containers:
+                  - name: kaniko
+                    image: gcr.io/kaniko-project/executor:debug
+                    imagePullPolicy: Always
+                    command:
+                    - /busybox/cat
+                    tty: true
+                    volumeMounts:
+                    - name: kaniko-secret
+                      mountPath: /kaniko/.docker
+                  volumes:
+                  - name: kaniko-secret
+                    secret:
+                      secretName: regcred
+                      items:
+                        - key: .dockerconfigjson
+                          path: config.json
+            """
+        }
+    }
     
     parameters {
         string(name: 'IMAGE_NAME', defaultValue: '', description: 'NOMBRE DEL MICROSERVICIO')
@@ -13,36 +41,27 @@ pipeline {
         TAG = "${params.TAG}"
         // IP del registry interno de Minikube (usualmente localhost:5000 dentro del cluster)
     }
-    
     stages {
         stage('Checkout') {
             steps {
                 checkout([$class: 'GitSCM', 
                     branches: [[name: 'main']], // O la rama que necesites
-                    extensions: [[$class: 'GitOption', remotePolling: false, gitTool: 'Default']],
                     userRemoteConfigs: [[
-                        url: 'git@github.com:priera12/alumnos_backend.git',
+                        url: 'https://github.com/priera12/alumnos_backend.git',
                         credentialsId: 'Jenkins-pipeline' // El ID de tu credencial
                     ]]
                 ])
             }
         }
-        
         stage('Build and Push Image') {
             steps {
-                script {
-                    // Ejemplo: Usar el token generado por la GitHub App
-                    // para hacer un curl a la API de GitHub
-                        sh 'git --version'
-                        sh 'printenv | grep JENKINS'
-//                    container('kaniko') {
-//                    sh '''
-//                    /kaniko/executor --context=`pwd`
-//                    --dockerfile=Dockerfile
-//                    --destination=${IMAGE_NAME}:${TAG}
-//                    --no-push=false
-//                    '''
-//                    }
+                container ('kaniko') {
+                    sh """
+                    /kaniko/executor --context=`pwd` \
+                    --dockerfile=Dockerfile \
+                    --destination=${params.IMAGE_NAME}:${params.TAG} \
+                    --skip-tls-verify=true
+                    """
                 }
             }
         }
