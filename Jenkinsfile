@@ -49,7 +49,7 @@ pipeline {
                     sh """
                     /kaniko/executor --context=`pwd` \
                     --dockerfile=Dockerfile \
-                    --destination=192.168.58.2:31572/${params.IMAGE_NAME}:${params.TAG} \
+                    --destination=registry.kube-system.svc.cluster.local/${params.IMAGE_NAME}:${params.TAG} \
                     --skip-tls-verify=true
                     """
                 }
