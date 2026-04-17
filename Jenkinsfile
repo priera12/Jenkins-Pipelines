@@ -43,15 +43,23 @@ pipeline {
                 ])
             }
         }
-        stage('Build and Push Image') {
+        stage('Build TAR') {
             steps {
                 container ('kaniko') {
                     sh """
                     /kaniko/executor --context=`pwd` \
                     --dockerfile=Dockerfile \
-                    --destination=registry.kube-system.svc.cluster.local/${params.IMAGE_NAME}:${params.TAG} \
+                    --destination=tarball:/tmp/${params.IMAGE_NAME}_${params.TAG}.tar \
                     --skip-tls-verify=true
                     """
+                }
+            }
+        }
+        stage('Copy Image to Node'){
+            steps{
+                script{
+                    sh "kubectl cp ${env.POD_NAME}:/tmp/${params.IMAGE_NAME}_${params.TAG}.tar ./${params.IMAGE_NAME}_${params.TAG}.tar"
+                    sh "minikube image load ${params.IMAGE_NAME}_${params.TAG}.tar -p multinode-demo"
                 }
             }
         }
