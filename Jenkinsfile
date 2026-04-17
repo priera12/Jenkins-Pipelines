@@ -12,10 +12,12 @@ pipeline {
                   - name: kaniko
                     image: gcr.io/kaniko-project/executor:debug
                     imagePullPolicy: Always
+                    command:
+                    - /busybox/cat                    
                   - name: kubectl
                     image: bitnami/kubectl:latest
                     command:
-                    - /busybox/cat
+                    - cat
                     tty: true
             """
         }
