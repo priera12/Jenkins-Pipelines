@@ -25,10 +25,6 @@ pipeline {
                     command:
                     - /busybox/cat
                     tty: true
-                  - name: kubectl
-                    image: bitnami/kubectl:latest
-                    command: ['cat']
-                    tty: true
             """
         }
     }
@@ -59,21 +55,23 @@ pipeline {
         }
         stage('Build & Load') {
             steps {
-                script {
-                    // 1. Kaniko escribe el tar en la RAM (/dev/shm)
-                    sh """
-                    /kaniko/executor --context=`pwd` \
-                        --dockerfile=Dockerfile \
-                        --tar-path /dev/shm/image.tar \
-                        --no-push \
-                        --skip-tls-verify=true
-                    """
-                    
-                    // 2. Minikube carga el tar desde la RAM
-                    sh "minikube image load /dev/shm/image.tar"
-                    
-                    // 3. Limpieza inmediata (opcional, pero buena práctica)
-                    sh "rm /dev/shm/image.tar"
+                container('kaniko'){
+                    script {
+                        // 1. Kaniko escribe el tar en la RAM (/dev/shm)
+                        sh """
+                        /kaniko/executor --context=`pwd` \
+                            --dockerfile=Dockerfile \
+                            --tar-path /dev/shm/image.tar \
+                            --no-push \
+                            --skip-tls-verify=true
+                        """
+
+                        // 2. Minikube carga el tar desde la RAM
+                        sh "minikube image load /dev/shm/image.tar"
+
+                        // 3. Limpieza inmediata (opcional, pero buena práctica)
+                        sh "rm /dev/shm/image.tar"
+                    }
                 }
             }
         }
