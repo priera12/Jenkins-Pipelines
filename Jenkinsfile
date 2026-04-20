@@ -14,9 +14,11 @@ pipeline {
                       limits:
                         memory: "2Gi"  # Aumenta esto. Los builds de JS son hambrientos.
                         cpu: "1000m"
+                        ephemeral-storage: "8Gi"
                       requests:
                         memory: "1Gi"
-                        cpu: "500m"                  
+                        cpu: "500m"
+                        ephemeral-storage: "8Gi"
                   - name: kaniko
                     image: gcr.io/kaniko-project/executor:debug
                     imagePullPolicy: Always
