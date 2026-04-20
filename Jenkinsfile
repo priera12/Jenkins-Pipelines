@@ -57,30 +57,26 @@ pipeline {
                 ])
             }
         }
-        stage('Build TAR') {
+        stage('Build & Load') {
             steps {
-                container ('kaniko') {
+                script {
+                    // 1. Kaniko escribe el tar en la RAM (/dev/shm)
                     sh """
                     /kaniko/executor --context=`pwd` \
-                    --dockerfile=Dockerfile \
-                    --tar-path /tmp/${params.IMAGE_NAME}_${params.TAG}.tar \
-                    --no-push \
-                    --skip-tls-verify=true
+                        --dockerfile=Dockerfile \
+                        --tar-path /dev/shm/image.tar \
+                        --no-push \
+                        --skip-tls-verify=true
                     """
+                    
+                    // 2. Minikube carga el tar desde la RAM
+                    sh "minikube image load /dev/shm/image.tar"
+                    
+                    // 3. Limpieza inmediata (opcional, pero buena práctica)
+                    sh "rm /dev/shm/image.tar"
                 }
             }
         }
-        stage('Copy Image to Node'){
-            steps{
-                    container('kubectl'){
-                        script{
-                        def podName = sh(script: 'hostname', returnStdout: true).trim()
-                        echo "El nombre del pod es: ${podName}"
-                        sh "kubectl cp ${podName}:/tmp/${params.IMAGE_NAME}_${params.TAG}.tar ./${params.IMAGE_NAME}_${params.TAG}.tar"
-                        sh "minikube image load ${params.IMAGE_NAME}_${params.TAG}.tar -p multinode-demo"
-                        }
-                    }
-            }
-        }
+
     }
 }
