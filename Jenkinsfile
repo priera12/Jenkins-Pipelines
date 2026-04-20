@@ -1,26 +1,6 @@
 pipeline {
     agent {
-        kubernetes{
-            yaml """
-                apiVersion: v1
-                kind: Pod
-                metadata:
-                  labels:
-                    app: kaniko-build
-                spec:
-                  containers:
-                  - name: kaniko
-                    image: gcr.io/kaniko-project/executor:debug
-                    imagePullPolicy: Always
-                    command:
-                    - /busybox/cat
-                    tty: true
-                  - name: kubectl
-                    image: bitnami/kubectl:latest
-                    command: ['cat']
-                    tty: true
-            """
-        }
+        any
     }
     
     parameters {
@@ -47,30 +27,25 @@ pipeline {
                 ])
             }
         }
-        stage('Build TAR') {
+        stage('Build Image') {
             steps {
-                container ('kaniko') {
                     sh """
-                    /kaniko/executor --context=`pwd` \
-                    --dockerfile=Dockerfile \
-                    --tar-path /tmp/${params.IMAGE_NAME}_${params.TAG}.tar \
-                    --no-push \
-                    --skip-tls-verify=true
+                    docker image build -t ${params.IMAGE_NAME}:${params.TAG} .
+                    minikube image load ${params.IMAGE_NAME}:${params.TAG} -p multinode-demo
                     """
-                }
             }
         }
-        stage('Copy Image to Node'){
-            steps{
-                    container('kubectl'){
-                        script{
-                        def podName = sh(script: 'hostname', returnStdout: true).trim()
-                        echo "El nombre del pod es: ${podName}"
-                        sh "kubectl cp ${podName}:/tmp/${params.IMAGE_NAME}_${params.TAG}.tar ./${params.IMAGE_NAME}_${params.TAG}.tar"
-                        sh "minikube image load ${params.IMAGE_NAME}_${params.TAG}.tar -p multinode-demo"
-                        }
-                    }
-            }
-        }
+        //stage('Copy Image to Node'){
+        //    steps{
+        //            container('kubectl'){
+        //                script{
+        //                def podName = sh(script: 'hostname', returnStdout: true).trim()
+        //                echo "El nombre del pod es: ${podName}"
+        //                sh "kubectl cp ${podName}:/tmp/${params.IMAGE_NAME}_${params.TAG}.tar ./${params.IMAGE_NAME}_${params.TAG}.tar"
+        //                sh "minikube image load ${params.IMAGE_NAME}_${params.TAG}.tar -p multinode-demo"
+        //                }
+        //            }
+        //    }
+        //}
     }
 }
