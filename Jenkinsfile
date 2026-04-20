@@ -67,6 +67,8 @@ pipeline {
                     --no-push \
                     --skip-tls-verify=true
                     // 2. Minikube carga el tar desde la RAM
+
+                    minikube version
                     "minikube image load /dev/shm/${params.IMAGE_NAME}_${params.TAG}.tar"
                     
                     // 3. Limpieza inmediata (opcional, pero buena práctica)
