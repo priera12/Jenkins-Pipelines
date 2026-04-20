@@ -1,5 +1,6 @@
 pipeline {
-    
+    agent any
+
     parameters {
         string(name: 'IMAGE_NAME', defaultValue: '', description: 'NOMBRE DEL MICROSERVICIO')
         string(name: 'TAG', defaultValue: '', description: 'VERSION')
