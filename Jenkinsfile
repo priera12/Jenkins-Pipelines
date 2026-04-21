@@ -25,10 +25,16 @@ pipeline {
                     command:
                     - /busybox/cat
                     tty: true
+                    volumeMounts:
+                      - name: shared-data
+                        mountPath: /shared                    
                   - name: kubectl
                     image: bitnami/kubectl:latest
                     command: ['cat']
                     tty: true
+                    volumeMounts:
+                      - name: shared-data
+                        mountPath: /shared
                 volumes:
                 - name: shared-data
                   emptyDir:
@@ -72,17 +78,16 @@ pipeline {
                     --no-push \
                     --skip-tls-verify=true
                     // 2. Minikube carga el tar desde la RAM
-
+                    """
+                }
+                sh """
                     minikube version
-
                     ls -l /shared/
-
                     minikube image load /shared/${params.IMAGE_NAME}_${params.TAG}.tar"
                     
                     // 3. Limpieza inmediata (opcional, pero buena práctica)
                     //"rm /dev/shm/${params.IMAGE_NAME}_${params.TAG}.tar"
-                    """
-                }
+                """
             }
         }
     }
