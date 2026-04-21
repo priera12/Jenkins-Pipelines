@@ -19,6 +19,9 @@ pipeline {
                         memory: "1Gi"
                         cpu: "500m"
                         ephemeral-storage: "8Gi"
+                    volumeMounts:
+                      - name: shared-data 
+                        mountPath: /shared
                   - name: kaniko
                     image: gcr.io/kaniko-project/executor:debug
                     imagePullPolicy: Always
