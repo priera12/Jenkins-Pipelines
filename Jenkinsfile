@@ -2,47 +2,47 @@ pipeline {
     agent {
         kubernetes{
             yaml """
-                 apiVersion: v1
-                 kind: Pod
-                 metadata:
-                   labels:
-                     app: kaniko-build
-                 spec:
-                   containers:
-                   - name: jnlp
-                     resources:
-                       limits:
-                         memory: "2Gi"
-                         cpu: "1000m"
-                         ephemeral-storage: "8Gi"
-                       requests:
-                         memory: "1Gi"
-                         cpu: "500m"
-                         ephemeral-storage: "8Gi"
-                     volumeMounts:
-                       - name: shared-data
-                         mountPath: /shared
-                   - name: kaniko
-                     image: gcr.io/kaniko-project/executor:debug
-                     imagePullPolicy: Always
-                     command:
-                     - /busybox/cat
-                     tty: true
-                     volumeMounts:
-                       - name: shared-data
-                         mountPath: /shared
-                   - name: minikube-tool # Cambié el nombre para que sea más descriptivo
-                     image: gcr.io/k8s-minikube/minikube:latest # OJO: bitnami/kubectl NO tiene minikube
-                     command: ['cat']
-                     tty: true
-                     volumeMounts:
-                       - name: shared-data
-                         mountPath: /shared
-                   volumes:
-                   - name: shared-data
-                     emptyDir:
-                       medium: Memory
-                       sizeLimit: "3Gi"
+                apiVersion: v1
+                kind: Pod
+                metadata:
+                  labels:
+                    app: kaniko-build
+                spec:
+                  containers:
+                  - name: jnlp
+                    resources:
+                      limits:
+                        memory: "2Gi"  # Aumenta esto. Los builds de JS son hambrientos.
+                        cpu: "1000m"
+                        ephemeral-storage: "8Gi"
+                      requests:
+                        memory: "1Gi"
+                        cpu: "500m"
+                        ephemeral-storage: "8Gi"
+                    volumeMounts:
+                      - name: shared-data 
+                        mountPath: /shared
+                  - name: kaniko
+                    image: gcr.io/kaniko-project/executor:debug
+                    imagePullPolicy: Always
+                    command:
+                    - /busybox/cat
+                    tty: true
+                    volumeMounts:
+                      - name: shared-data
+                        mountPath: /shared
+                  - name: kubectl
+                    image: bitnami/kubectl:latest
+                    command: ['cat']
+                    tty: true
+                    volumeMounts:
+                      - name: shared-data
+                        mountPath: /shared
+                  volumes:
+                  - name: shared-data
+                    emptyDir:
+                      medium: Memory # Usamos RAM para que sea ultra rápido
+                      sizeLimit: "3Gi"
             """
         }
     }
