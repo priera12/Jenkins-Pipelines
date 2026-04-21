@@ -10,7 +10,6 @@ pipeline {
                  spec:
                    containers:
                    - name: jnlp
-                     image: jenkins/inbound-agent:latest # Asegúrate de tener la imagen correcta aquí
                      resources:
                        limits:
                          memory: "2Gi"
