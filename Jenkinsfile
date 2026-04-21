@@ -30,7 +30,7 @@ pipeline {
                     tty: true
                     volumeMounts:
                       - name: shared-data
-                        mountPath: /shared                    
+                        mountPath: /shared
                   - name: kubectl
                     image: bitnami/kubectl:latest
                     command: ['cat']
