@@ -46,6 +46,10 @@ pipeline {
                     emptyDir:
                       medium: Memory # Usamos RAM para que sea ultra rápido
                       sizeLimit: "3Gi"
+                  - name: docker-socket
+                    hostPath:
+                      path: /var/run/docker.sock
+                      type: Socket
             """
         }
     }
