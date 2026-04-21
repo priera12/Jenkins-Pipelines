@@ -29,6 +29,11 @@ pipeline {
                     image: bitnami/kubectl:latest
                     command: ['cat']
                     tty: true
+                volumes:
+                - name: shared-data
+                  emptyDir:
+                    medium: Memory # Usamos RAM para que sea ultra rápido
+                    sizeLimit: "3Gi"
             """
         }
     }
@@ -63,16 +68,16 @@ pipeline {
                     sh """
                     /kaniko/executor --context=`pwd` \
                     --dockerfile=Dockerfile \
-                    --tar-path /dev/shm/${params.IMAGE_NAME}_${params.TAG}.tar \
+                    --tar-path /shared/${params.IMAGE_NAME}_${params.TAG}.tar \
                     --no-push \
                     --skip-tls-verify=true
                     // 2. Minikube carga el tar desde la RAM
 
                     minikube version
 
-                    ls -l /dev/shm
+                    ls -l /shared/
 
-                    //"minikube image load /dev/shm/${params.IMAGE_NAME}_${params.TAG}.tar"
+                    minikube image load /shared/${params.IMAGE_NAME}_${params.TAG}.tar"
                     
                     // 3. Limpieza inmediata (opcional, pero buena práctica)
                     //"rm /dev/shm/${params.IMAGE_NAME}_${params.TAG}.tar"
