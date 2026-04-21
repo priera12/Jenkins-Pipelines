@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'k8s-agent' }
+    agent { label 'kaniko-builder' }
     
     parameters {
         string(name: 'IMAGE_NAME', defaultValue: '', description: 'NOMBRE DEL MICROSERVICIO')
