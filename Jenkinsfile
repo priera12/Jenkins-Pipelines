@@ -31,13 +31,16 @@ pipeline {
                     volumeMounts:
                       - name: shared-data
                         mountPath: /shared
-                  - name: kubectl
-                    image: bitnami/kubectl:latest
-                    command: ['cat']
-                    tty: true
-                    volumeMounts:
-                      - name: shared-data
-                        mountPath: /shared
+                  - name: minikube-helper
+                      image: alpine:latest
+                      command: ['/bin/sh', '-c']
+                      args: ['apk add --no-cache curl && curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && install minikube-linux-amd64 /usr/local/bin/minikube && tail -f /dev/null']
+                      tty: true
+                      volumeMounts:
+                        - name: shared-data
+                          mountPath: /shared
+                        - name: docker-socket
+                          mountPath: /var/run/docker.sock
                   volumes:
                   - name: shared-data
                     emptyDir:
@@ -82,14 +85,15 @@ pipeline {
                     --skip-tls-verify=true
                     """
                 }
+                container('minikube-helper') {
                     sh """
-                        minikube version
-                        ls -l /shared/
-                        minikube image load /shared/${params.IMAGE_NAME}_${params.TAG}.tar"
-                        
-                        // 3. Limpieza inmediata (opcional, pero buena práctica)
-                        //"rm /dev/shm/${params.IMAGE_NAME}_${params.TAG}.tar"
+                    echo "Cargando imagen a Minikube..."
+                    minikube image load /shared/${params.IMAGE_NAME}_${params.TAG}.tar
+                    
+                    echo "Limpiando..."
+                    rm /shared/${params.IMAGE_NAME}_${params.TAG}.tar
                     """
+                }
             }
         }
     }
