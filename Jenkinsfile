@@ -69,10 +69,13 @@ pipeline {
                     // 2. Minikube carga el tar desde la RAM
 
                     minikube version
-                    "minikube image load /dev/shm/${params.IMAGE_NAME}_${params.TAG}.tar"
+
+                    ls -l /dev/shm
+
+                    //"minikube image load /dev/shm/${params.IMAGE_NAME}_${params.TAG}.tar"
                     
                     // 3. Limpieza inmediata (opcional, pero buena práctica)
-                    "rm /dev/shm/${params.IMAGE_NAME}_${params.TAG}.tar"
+                    //"rm /dev/shm/${params.IMAGE_NAME}_${params.TAG}.tar"
                     """
                 }
             }
