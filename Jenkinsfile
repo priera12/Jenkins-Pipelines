@@ -12,7 +12,7 @@ pipeline {
         GITHUB_CREDS = credentials('Jenkins-pipeline')
         IMAGE_NAME = "${params.IMAGE_NAME}"
         TAG = "${params.TAG}"
-        IMAGE_DESTINATION = "docker.io/pabloxr12/pxr207:${TAG}"
+        IMAGE_DESTINATION = "docker.io/pabloxr12/pxr207${IMAGE_NAME}:${TAG}"
         // IP del registry interno de Minikube (usualmente localhost:5000 dentro del cluster)
     }
     stages {
@@ -32,7 +32,7 @@ pipeline {
                 container ('kaniko') {
                     sh """
                     echo "${IMAGE_DESTINATION}"
-                    
+
                     /kaniko/executor --context=`pwd` \
                     --dockerfile=Dockerfile \
                     --destination=${IMAGE_DESTINATION} \
