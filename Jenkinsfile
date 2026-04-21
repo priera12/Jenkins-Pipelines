@@ -32,15 +32,15 @@ pipeline {
                       - name: shared-data
                         mountPath: /shared
                   - name: minikube-helper
-                      image: alpine:latest
-                      command: ['/bin/sh', '-c']
-                      args: ['apk add --no-cache curl && curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && install minikube-linux-amd64 /usr/local/bin/minikube && tail -f /dev/null']
-                      tty: true
-                      volumeMounts:
-                        - name: shared-data
-                          mountPath: /shared
-                        - name: docker-socket
-                          mountPath: /var/run/docker.sock
+                    image: alpine:latest
+                    command: ['/bin/sh', '-c']
+                    args: ['apk add --no-cache curl && curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && install minikube-linux-amd64 /usr/local/bin/minikube && tail -f /dev/null']
+                    tty: true
+                    volumeMounts:
+                      - name: shared-data
+                        mountPath: /shared
+                      - name: docker-socket
+                        mountPath: /var/run/docker.sock
                   volumes:
                   - name: shared-data
                     emptyDir:
