@@ -39,11 +39,11 @@ pipeline {
                      volumeMounts:
                        - name: shared-data
                          mountPath: /shared
-                 volumes:
-                 - name: shared-data
-                   emptyDir:
-                     medium: Memory
-                     sizeLimit: "3Gi"
+                   volumes:
+                   - name: shared-data
+                     emptyDir:
+                       medium: Memory
+                       sizeLimit: "3Gi"
             """
         }
     }
