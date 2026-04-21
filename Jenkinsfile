@@ -4,7 +4,7 @@ pipeline {
     parameters {
         string(name: 'IMAGE_NAME', defaultValue: '', description: 'NOMBRE DEL MICROSERVICIO')
         string(name: 'TAG', defaultValue: '', description: 'VERSION')
-        string(name: 'BRANCH', defaultValue: '', description: 'BRANCH')
+        string(name: 'BRANCH', defaultValue: 'main', description: 'BRANCH')
     }
 
     environment {
