@@ -1,18 +1,18 @@
 pipeline {
-    agent {label 'docker-builder'}
+    agent { label 'kaniko-builder' }
     
     parameters {
-        string(name: 'APP_NAME', defaultValue: '', description: 'NOMBRE DEL MICROSERVICIO')
+        string(name: 'IMAGE_NAME', defaultValue: '', description: 'NOMBRE DEL MICROSERVICIO')
         string(name: 'TAG', defaultValue: '', description: 'VERSION')
     }
 
     environment {
         // El ID que pusiste en Jenkins al guardar tu credencial
+
         GITHUB_CREDS = credentials('Jenkins-pipeline')
-        APP_NAME = "${params.APP_NAME}"
+        IMAGE_NAME = "${params.IMAGE_NAME}"
         TAG = "${params.TAG}"
-        REGISTRY = "registry.kube-system.svc.cluster.local:5000"
-        IMAGE_NAME = "${REGISTRY}/${APP_NAME}:${TAG}"
+        IMAGE_DESTINATION = "docker.io/pabloxr12/pxr207:${TAG}"
         // IP del registry interno de Minikube (usualmente localhost:5000 dentro del cluster)
     }
     stages {
@@ -21,19 +21,21 @@ pipeline {
                 checkout([$class: 'GitSCM', 
                     branches: [[name: 'main']], // O la rama que necesites
                     userRemoteConfigs: [[
-                        url: "https://github.com/priera12/${APP_NAME}.git",
+                        url: "https://github.com/priera12/${IMAGE_NAME}.git",
                         credentialsId: 'Jenkins-pipeline' // El ID de tu credencial
                     ]]
                 ])
             }
         }
-        stage('Build & Push') {
+        stage('Build TAR') {
             steps {
-                script {
-                        echo "Construyendo imagen para el registro interno..."
-                        sh "docker build -t ${IMAGE_NAME} ."
-                        echo "Haciendo push al registro de Minikube..."
-                        sh "docker push ${IMAGE_NAME}"
+                container ('kaniko') {
+                    sh """
+                    /kaniko/executor --context=`pwd` \
+                    --dockerfile=Dockerfile \
+                    --destination=${IMAGE_DESTINATION} \
+                    --cache=true
+                    """
                 }
             }
         }
