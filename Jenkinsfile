@@ -31,6 +31,8 @@ pipeline {
             steps {
                 container ('kaniko') {
                     sh """
+                    echo "${IMAGE_DESTINATION}"
+                    
                     /kaniko/executor --context=`pwd` \
                     --dockerfile=Dockerfile \
                     --destination=${IMAGE_DESTINATION} \
