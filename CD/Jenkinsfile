@@ -16,7 +16,7 @@ pipeline {
                 checkout([$class: 'GitSCM', 
                     branches: [[name: "${params.BRANCH}"]], // O la rama que necesites
                     userRemoteConfigs: [[
-                        url: "https://github.com/priera12/PXR_K8S.git"
+                        url: "https://github.com/priera12/PXR_K8S.git",
                         credentialsId: 'Jenkins-pipeline' // El ID de tu credencial
                     ]]
                 ])
