@@ -14,7 +14,7 @@ pipeline {
             steps {
                 script {
                     // Usando withKubeConfig para asegurar el contexto correcto
-                    withKubeConfig([credentialsId: 'kubeconfig']) {
+                    withKubeConfig([credentialsId: 'multinode-demo-certificates']) {
                         sh """
                         echo "Desplegando versión ${params.IMAGE_TAG} en ${params.ENV}"
                         kubectl set image deployment/mi-app mi-app-container=mi-imagen:${env.IMAGE} -n ${params.APP_NAME}
