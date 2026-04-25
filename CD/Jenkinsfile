@@ -25,15 +25,17 @@ pipeline {
         stage('Deploy to Minikube') {
             steps {
                 script {
-                    def IMAGE = "${env.REG}${params.APP_NAME}:${params.VERSION}"
-                        withCredentials([file(credentialsId: 'kubeconfig-file-type', variable: 'KUBECONFIG')]) {
-                            dir("Helm/${params.APP_NAME}"){
-                                script {
-                                    // Helm detecta automáticamente la variable de entorno KUBECONFIG
-                                    sh "helm upgrade ${params.APP_NAME} ./${params.APP_NAME} --namespace ${params.APP_NAME} --set image.repository=${IMAGE} --reuse-values"
-                                    }
+                    container('helm'){
+                        def IMAGE = "${env.REG}${params.APP_NAME}:${params.VERSION}"
+                            withCredentials([file(credentialsId: 'kubeconfig-file-type', variable: 'KUBECONFIG')]) {
+                                dir("Helm/${params.APP_NAME}"){
+                                    script {
+                                        // Helm detecta automáticamente la variable de entorno KUBECONFIG
+                                        sh "helm upgrade ${params.APP_NAME} ./${params.APP_NAME} --namespace ${params.APP_NAME} --set image.repository=${IMAGE} --reuse-values"
+                                        }
+                                }
                             }
-                        }
+                    }
                 }
             }
         }
