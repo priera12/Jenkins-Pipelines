@@ -8,13 +8,15 @@ pipeline {
 
     environment{
         REG = "docker.io/pabloxr12/pxr207-"
+        BRANCH_NAME = "${params.BRANCH}"
+
     }
 
     stages {
         stage('Checkout') {
             steps {
                 checkout([$class: 'GitSCM', 
-                    branches: [[name: "${params.BRANCH}"]], // O la rama que necesites
+                    branches: [[name: "${env.BRANCH_NAME}"]], // O la rama que necesites
                     userRemoteConfigs: [[
                         url: "https://github.com/priera12/PXR_K8S.git"
                         credentialsId: 'Jenkins-pipeline' // El ID de tu credencial
