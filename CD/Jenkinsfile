@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'kaniko-builder' }
+    agent { label 'agent-builder' }
     parameters {
         string(name: 'APP_NAME', defaultValue: '<APP_NAME>', description: 'Nombre de la APlicacion')
         string(name: 'VERSION' , defaultValue: '<VERSION>', description: 'Version de la imagen')
