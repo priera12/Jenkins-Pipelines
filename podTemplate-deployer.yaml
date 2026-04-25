@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    label: Agent-deployer
+    name: Agent-deployer
+spec:
+  containers:
+  - name: jnlp
+    image: jenkins/inbound-agent:latest
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+    # El JNLP necesita el workspace para reportar el estado al master
+    volumeMounts:
+    - name: workspace-volume
+      mountPath: /home/jenkins/workspace 
+  - name: helm
+    image: alpine/helm:3.14.0
+    command: ['cat']
+    tty: true
+    resources:
+      requests:
+        cpu: "50m"
+        memory: "128Mi"
+  volumes:
+  - name: workspace-volume
+    emptyDir: {}
