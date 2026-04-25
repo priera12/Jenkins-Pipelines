@@ -1,0 +1,28 @@
+pipeline {
+    agent { label 'kaniko-builder' }
+    parameters {
+        string(name: 'APP_NAME', defaultValue: '<APP_NAME>', description: 'Nombre de la APlicacion')
+        string(name: 'VERSION' , defaultValue: '<VERSION>', description: 'Version de la imagen')
+    }
+
+    environment {
+        IMAGE = "docker.io/pabloxr12/pxr207-${params.APP_NAME}:${params.VERSION}"
+    }
+
+    stages {
+        stage('Deploy to Minikube') {
+            steps {
+                script {
+                    // Usando withKubeConfig para asegurar el contexto correcto
+                    withKubeConfig([credentialsId: 'kubeconfig']) {
+                        sh """
+                        echo "Desplegando versión ${params.IMAGE_TAG} en ${params.ENV}"
+                        kubectl set image deployment/mi-app mi-app-container=mi-imagen:${env.IMAGE} -n ${params.APP_NAME}
+                        kubectl rollout status deployment/mi-app
+                        """
+                    }
+                }
+            }
+        }
+    }
+}
