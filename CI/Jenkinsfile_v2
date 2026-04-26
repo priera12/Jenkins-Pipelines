@@ -49,7 +49,7 @@ pipeline {
                 script{
                     if (params.DEPLOY_ENABLED){
                         echo "Depliegue Habilitado"
-                        build job: 'Despliegue/Deploy_alumnos_frontend', 
+                        build job: 'Despliegue/Deploy_alumnos_frontend/main', 
                             parameters: [
                                 string(name: 'IMAGE_TAG', value: "${IMAGE_DESTINATION}"),
                                 string(name: 'NAMESPACE', value: "${IMAGE_NAME}"),
