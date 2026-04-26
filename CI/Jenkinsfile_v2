@@ -52,7 +52,8 @@ pipeline {
                     build job: 'Despliegue/Deploy_alumnos_frontend', 
                         parameters: [
                             string(name: 'IMAGE_TAG', value: "${IMAGE_DESTINATION}"),
-                            string(name: 'NAMESPACE', value: "${IMAGE_NAME}")
+                            string(name: 'NAMESPACE', value: "${IMAGE_NAME}"),
+                            string(name: 'BRANCH', value: "")
                         ], 
                         wait: true
                 } else {
