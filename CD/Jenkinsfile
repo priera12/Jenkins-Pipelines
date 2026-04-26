@@ -32,7 +32,7 @@ pipeline {
                                     script {
                                         def APP = params.APP_NAME.replaceAll('_', '-')
                                         // Helm detecta automáticamente la variable de entorno KUBECONFIG
-                                        sh "helm upgrade --install ${APP} . --set image.repository=${IMAGE} --reuse-values"
+                                        sh "helm upgrade --install ${APP} . --namespace ${APP} --set image.repository=${IMAGE} --reuse-values"
                                         }
                                 }
                             }
