@@ -30,8 +30,9 @@ pipeline {
                             withCredentials([file(credentialsId: 'kubeconfig-file-type', variable: 'KUBECONFIG')]) {
                                 dir("Helm/${params.APP_NAME}"){
                                     script {
+                                        def APP = params.APP_NAME.replaceAll('_', '-')
                                         // Helm detecta automáticamente la variable de entorno KUBECONFIG
-                                        sh "helm upgrade ${params.APP_NAME} . --namespace ${params.APP_NAME} --set image.repository=${IMAGE} --reuse-values"
+                                        sh "helm upgrade ${APP} . --namespace ${APP} --set image.repository=${IMAGE} --reuse-values"
                                         }
                                 }
                             }
