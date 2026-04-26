@@ -31,7 +31,7 @@ pipeline {
                                 dir("Helm/${params.APP_NAME}"){
                                     script {
                                         // Helm detecta automáticamente la variable de entorno KUBECONFIG
-                                        sh "helm upgrade ${params.APP_NAME} . --namespace ${params.APP_NAME} --set image.repository=${IMAGE} --reuse-values --insecure-skip-tls-verify"
+                                        sh "helm upgrade ${params.APP_NAME} . --namespace ${params.APP_NAME} --set image.repository=${IMAGE} --reuse-values"
                                         }
                                 }
                             }
