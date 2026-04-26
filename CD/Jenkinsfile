@@ -26,13 +26,13 @@ pipeline {
             steps {
                 script {
                     container('helm'){
-                        def IMAGE = "${env.REG}${params.APP_NAME}:${params.VERSION}"
+                        def IMAGE = "${env.REG}${params.APP_NAME}"
                             withCredentials([file(credentialsId: 'kubeconfig-file-type', variable: 'KUBECONFIG')]) {
                                 dir("Helm/${params.APP_NAME}"){
                                     script {
                                         def APP = params.APP_NAME.replaceAll('_', '-')
                                         // Helm detecta automáticamente la variable de entorno KUBECONFIG
-                                        sh "helm upgrade --install ${APP} . --set image.repository=${IMAGE}"
+                                        sh "helm upgrade --install ${APP} . --set deployment.image.repository=${IMAGE} --set deployment.image.tag=${params.VERSION}"
                                         }
                                 }
                             }
