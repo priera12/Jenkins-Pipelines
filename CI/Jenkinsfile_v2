@@ -52,8 +52,7 @@ pipeline {
                         build job: 'Despliegue/Deploy_alumnos_frontend/main', 
                             parameters: [
                                 string(name: 'APP_NAME', value: "${IMAGE_NAME}"),
-                                string(name: 'VERSION', value: "${env.TAG}"),
-                                string(name: 'BRANCH', value: "")
+                                string(name: 'VERSION', value: "${env.TAG}")
                             ], 
                             wait: true
                     } else {
