@@ -47,17 +47,18 @@ pipeline {
         stage('Deploy to Minikube') {
             steps {
                 script{
-                if (params.DEPLOY_ENABLED)
-                    echo "Depliegue Habilitado"
-                    build job: 'Despliegue/Deploy_alumnos_frontend', 
-                        parameters: [
-                            string(name: 'IMAGE_TAG', value: "${IMAGE_DESTINATION}"),
-                            string(name: 'NAMESPACE', value: "${IMAGE_NAME}"),
-                            string(name: 'BRANCH', value: "")
-                        ], 
-                        wait: true
-                } else {
-                    echo "Despliegue Omitido por el Usuario"
+                    if (params.DEPLOY_ENABLED){
+                        echo "Depliegue Habilitado"
+                        build job: 'Despliegue/Deploy_alumnos_frontend', 
+                            parameters: [
+                                string(name: 'IMAGE_TAG', value: "${IMAGE_DESTINATION}"),
+                                string(name: 'NAMESPACE', value: "${IMAGE_NAME}"),
+                                string(name: 'BRANCH', value: "")
+                            ], 
+                            wait: true
+                    } else {
+                        echo "Despliegue Omitido por el Usuario"
+                    }
                 }
             }
         }
