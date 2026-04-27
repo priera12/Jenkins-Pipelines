@@ -49,7 +49,7 @@ pipeline {
                 script{
                     if (params.DEPLOY_ENABLED){
                         echo "Depliegue Habilitado"
-                        build job: 'Despliegue/Deploy_alumnos_frontend/main', 
+                        build job: "Despliegue/Deploy_${IMAGE_NAME}/main", 
                             parameters: [
                                 string(name: 'APP_NAME', value: "${IMAGE_NAME}"),
                                 string(name: 'VERSION', value: "${env.TAG}"),
