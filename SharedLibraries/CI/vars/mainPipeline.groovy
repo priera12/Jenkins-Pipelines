@@ -37,10 +37,10 @@ def call(Map config = [:]){
             stage('Deploy to Minikube'){
                 steps{
                     triggerDeploy(
-                        appName = params.IMAGE_NAME,
-                        version = env.TAG,
-                        branch  = params.BRANCH,
-                        deployEnabled = params.DEPLOY_ENABLED
+                        appName : params.IMAGE_NAME,
+                        version : env.TAG,
+                        branch  : params.BRANCH,
+                        deployEnabled : params.DEPLOY_ENABLED
                     )
                 }
             }
