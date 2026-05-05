@@ -6,10 +6,10 @@ def call(Map config = [:]){
         }
 
         parameters {
-            string(name: 'IMAGE_NAME', defaultValue: '', description: 'NOMBRE DEL MICROSERVICIO')
-            string(name: 'TAG', defaultValue: '', description: 'VERSION')
-            string(name: 'BRANCH', defaultValue: 'main', description: 'BRANCH')
-            booleanParam(name: 'DEPLOY_ENABLED', defaultValue: false, description: '¿Deseas realizar el despliegue al cluster?')
+            string(name: 'IMAGE_NAME', defaultValue: config.IMAGE_NAME ?: '', description: 'NOMBRE DEL MICROSERVICIO')
+            string(name: 'TAG', defaultValue: config.TAG ?: '', description: 'VERSION')
+            string(name: 'BRANCH', defaultValue: config.BRANCH ?: 'main', description: 'BRANCH')
+            booleanParam(name: 'DEPLOY_ENABLED', defaultValue: config.DEPLOY_ENABLED ?: false, description: '¿Deseas realizar el despliegue al cluster?')
         }
 
         environment{
