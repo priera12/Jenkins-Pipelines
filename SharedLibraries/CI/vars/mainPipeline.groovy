@@ -30,7 +30,7 @@ def call(Map config = [:]){
                 steps{
                     
                     kanikoBuilder(
-                        env.IMAGE_DESTINATION
+                        destination = env.IMAGE_DESTINATION
                     )
                 }
             }
