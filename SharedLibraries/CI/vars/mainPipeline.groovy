@@ -28,10 +28,8 @@ def call(Map config = [:]){
 //            }
             stage('Build Image'){
                 steps{
-                    script{
-                    def destination = env.IMAGE_DESTINATION
+                    def destination = "${env.IMAGE_DESTINATION}"
                     kanikoBuilder(destination)
-                    }
                 }
             }
             stage('Deploy to Minikube'){
