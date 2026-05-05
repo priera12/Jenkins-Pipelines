@@ -28,9 +28,13 @@ def call(Map config = [:]){
 //            }
             stage('Build Image'){
                 steps{
-                    step{
+                    script{
+
                         def destination = "${env.IMAGE_DESTINATION}"
-                        kanikoBuilder(destination)
+                        
+                        kanikoBuilder(
+                            destination = destination
+                        )
                     }
                 }
             }
