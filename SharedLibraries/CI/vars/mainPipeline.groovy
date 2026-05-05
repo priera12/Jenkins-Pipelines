@@ -22,7 +22,6 @@ def call(Map config = [:]){
                 steps{
                     checkoutCode(
                         appName: params.IMAGE_NAME,
-                        version: env.TAG,
                         branch: params.BRANCH
                     )
                 }

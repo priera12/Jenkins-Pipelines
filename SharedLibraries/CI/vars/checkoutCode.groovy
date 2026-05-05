@@ -1,7 +1,7 @@
 def call(Map args = [:]) {
 
-    def appName = args.IMAGE_NAME
-    def branchName = args.branchName ?: 'main'
+    def appName = args.appName
+    def branchName = args.branch ?: 'main'
     def credentials = 'Jenkins-pipeline'
     def baseUrl = args.baseUrl ?: "https://github.com/priera12"
 
