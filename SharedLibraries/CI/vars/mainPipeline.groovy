@@ -18,14 +18,14 @@ def call(Map config = [:]){
         }
 
         stages {
-            stage('Checkout'){
-                steps{
-                    checkoutCode(
-                        appName: params.IMAGE_NAME,
-                        branch: params.BRANCH
-                    )
-                }
-            }
+//            stage('Checkout'){
+//                steps{
+//                    checkoutCode(
+//                        appName: params.IMAGE_NAME,
+//                        branch: params.BRANCH
+//                    )
+//                }
+//            }
             stage('Build Image'){
                 steps{
                     
