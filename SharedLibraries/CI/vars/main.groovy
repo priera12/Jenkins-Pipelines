@@ -13,7 +13,8 @@ def call(Map config = [:]){
         }
 
         environment{
-            IMAGE_DESTINATION = "docker.io/pabloxr12/pxr207-${IMAGE_NAME}:${TAG}"
+            TAG = "${params.TAG}${env.BUILD_NUMBER}"
+            IMAGE_DESTINATION = "docker.io/pabloxr12/pxr207-${IMAGE_NAME}:${env.TAG}"
         }
 
         stages {
@@ -22,7 +23,7 @@ def call(Map config = [:]){
                     checkoutCode(
                         deployEnabled: params.DEPLOY_ENABLED
                         appName: params.IMAGE_NAME
-                        version: params.TAG
+                        version: env.TAG
                         branch: params.BRANCH
                     )
                 }
@@ -39,7 +40,7 @@ def call(Map config = [:]){
                 steps{
                     triggerDeploy(
                         appName = params.IMAGE_NAME
-                        version = params.TAG
+                        version = env.TAG
                         branch  = params.BRANCH
                         deployEnabled = params.DEPLOY_ENABLED
                     )
