@@ -1,5 +1,9 @@
 def call(Map args = [:]) {
 
+    echo "IMPRESION DE VARIABLES"
+    echo "${args.appName}"
+    echo "${args.branch}"
+
     def appName = args.appName
     def branchName = args.branch ?: 'main'
     def credentials = 'Jenkins-pipeline'
@@ -8,7 +12,7 @@ def call(Map args = [:]) {
     echo "Iniciando Checkout del repositorio: ${baseUrl} (Rama: ${branchName})"
 
     checkout([$class: 'GitSCM', 
-        branches: [[name: branchName]], 
+        branches: [[name: "${branchName}"]], 
         userRemoteConfigs: [[
             url: "${baseUrl}/${appName}.git",
             credentialsId: credentials
