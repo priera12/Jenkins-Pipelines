@@ -21,7 +21,6 @@ def call(Map config = [:]){
             stage('Checkout'){
                 steps{
                     checkoutCode(
-                        deployEnabled: params.DEPLOY_ENABLED,
                         appName: params.IMAGE_NAME,
                         version: env.TAG,
                         branch: params.BRANCH
