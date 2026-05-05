@@ -2,7 +2,7 @@ def call(Map args = [:]) {
 
     def appName = args.IMAGE_NAME
     def branchName = args.branchName ?: 'main'
-    def credencials = 'Jenkins-pipeline'
+    def credentials = 'Jenkins-pipeline'
     def baseUrl = args.baseUrl ?: "https://github.com/priera12"
 
     echo "Iniciando Checkout del repositorio: ${baseUrl} (Rama: ${branchName})"
