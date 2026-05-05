@@ -1,4 +1,4 @@
-def call (args [:]){
+def call (args = [:]){
 
     def appName       = args.appName
     def version       = args.version
